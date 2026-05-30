@@ -36,6 +36,7 @@ export interface ProductWithPrice {
   name: string
   price?: number | null
   characteristics?: ProductCharacteristic | null
+  previewUrl?: string | null
 }
 
 export interface ProductImageMeta {
@@ -47,7 +48,7 @@ export interface ProductImageMeta {
 }
 
 export function getProducts(include: 'None' | 'Partial' | 'Full' = 'Partial') {
-  return request<ProductWithPrice[]>(`/api/Products?include=${include}`)
+  return request<ProductWithPrice[]>(`/api/Products?include=${include}&includePreviews=true`)
 }
 
 export function getProduct(id: string, includeCharacteristics = true) {

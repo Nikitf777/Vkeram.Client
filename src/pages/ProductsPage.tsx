@@ -7,13 +7,12 @@ import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import Skeleton from '@mui/material/Skeleton'
 import Alert from '@mui/material/Alert'
-import { getProducts, type ProductWithPrice, getProductImages, getProductImageUrl } from '../api/products'
+import { getProducts, type ProductWithPrice } from '../api/products'
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductWithPrice[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [firstImages, setFirstImages] = useState<Record<string, string | null>>({})
 
   useEffect(() => {
     getProducts('Partial')
@@ -21,24 +20,6 @@ export default function ProductsPage() {
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
   }, [])
-
-  useEffect(() => {
-    if (products.length === 0) return
-    let cancelled = false
-    ;(async () => {
-      const map: Record<string, string | null> = {}
-      for (const p of products) {
-        try {
-          const images = await getProductImages(p.id)
-          map[p.id] = images.length > 0 ? getProductImageUrl(p.id, images[0].id) : null
-        } catch {
-          map[p.id] = null
-        }
-      }
-      if (!cancelled) setFirstImages(map)
-    })()
-    return () => { cancelled = true }
-  }, [products])
 
   if (loading) {
     return (
@@ -59,11 +40,11 @@ export default function ProductsPage() {
       {products.map((p) => (
         <Grid key={p.id} size={{ xs: 12, sm: 6, md: 4 }}>
           <Card sx={{ display: 'flex', height: '100%' }}>
-            {firstImages[p.id] ? (
+            {p.previewUrl ? (
               <CardMedia
                 component="img"
                 sx={{ width: 140, objectFit: 'contain', flexShrink: 0, p: 1 }}
-                image={firstImages[p.id]!}
+                image={p.previewUrl}
                 alt={p.name}
               />
             ) : (
