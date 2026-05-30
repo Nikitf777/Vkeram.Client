@@ -12,7 +12,7 @@ export default function Layout() {
 
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar position="sticky" sx={{ bgcolor: '#860A1F' }}>
         <Toolbar>
           <Typography variant="h6" sx={{ mr: 4, fontWeight: 700, letterSpacing: 1 }}>
             VKERAM
