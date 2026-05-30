@@ -4,6 +4,8 @@ import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProductsPage from './pages/ProductsPage'
+import OrdersPage from './pages/OrdersPage'
+import CreateOrderPage from './pages/CreateOrderPage'
 import AccountPage from './pages/AccountPage'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 
@@ -19,6 +21,8 @@ export default function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/products" replace />} />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/orders/new" element={<CreateOrderPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/account" element={<AccountPage />} />

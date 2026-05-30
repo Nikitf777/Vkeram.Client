@@ -20,6 +20,9 @@ export default function Layout() {
           <Button color="inherit" component={RouterLink} to="/products">
             Products
           </Button>
+          <Button color="inherit" component={RouterLink} to="/orders">
+            Orders
+          </Button>
           <Box sx={{ flexGrow: 1 }} />
           {isAuthenticated ? (
             <>
