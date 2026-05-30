@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { getMyOrders, type OrderResponse } from '../api/orders'
 import Typography from '@mui/material/Typography'
 import Table from '@mui/material/Table'
@@ -28,6 +28,7 @@ const statusColor: Record<string, 'default' | 'success' | 'warning' | 'error' | 
 }
 
 export default function OrdersPage() {
+  const navigate = useNavigate()
   const [orders, setOrders] = useState<OrderResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -68,7 +69,12 @@ export default function OrdersPage() {
             </TableHead>
             <TableBody>
               {orders.map((o) => (
-                <TableRow key={o.orderId}>
+                <TableRow
+                  key={o.orderId}
+                  hover
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/orders/${o.orderId}`)}
+                >
                   <TableCell>{o.orderId}</TableCell>
                   <TableCell>
                     <Chip size="small" label={o.confirmationStatus} color={statusColor[o.confirmationStatus ?? ''] || 'default'} />

@@ -79,6 +79,10 @@ export function getMyOrders() {
   return authRequest<OrderResponse[]>('/api/Orders')
 }
 
+export function getMyOrderById(orderId: number) {
+  return authRequest<OrderResponse>(`/api/Orders/${orderId}`)
+}
+
 export function getReservationSlots(from?: string, to?: string) {
   const params = new URLSearchParams()
   if (from) params.set('from', from)
