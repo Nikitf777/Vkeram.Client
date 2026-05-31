@@ -97,3 +97,13 @@ export function createOrder(payload: CreateOrderPayload) {
     body: JSON.stringify(payload),
   })
 }
+
+export async function fetchAllowBooking(): Promise<boolean> {
+  const data = await authRequest<{ success: boolean; allowBooking: { isAllowed: boolean } }>('/api/Orders/allow-booking')
+  return data.allowBooking.isAllowed
+}
+
+export async function fetchAllowDelivery(): Promise<boolean> {
+  const data = await authRequest<{ success: boolean; allowDelivery: { isAllowed: boolean } }>('/api/Orders/allow-delivery')
+  return data.allowDelivery.isAllowed
+}

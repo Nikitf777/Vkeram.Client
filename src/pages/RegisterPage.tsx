@@ -12,7 +12,6 @@ export default function RegisterPage() {
   const { register } = useAuth()
   const navigate = useNavigate()
   const [inviteCode, setInviteCode] = useState('')
-  const [companyName, setCompanyName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
   const [contactName, setContactName] = useState('')
   const [password, setPassword] = useState('')
@@ -25,7 +24,7 @@ export default function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      await register({ inviteCode, companyName, contactEmail, contactName, password, phone: phone || undefined })
+      await register({ inviteCode, contactEmail, contactName, password, phone: phone || undefined })
       navigate('/products')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed')
@@ -39,7 +38,6 @@ export default function RegisterPage() {
       <Typography variant="h5" sx={{ textAlign: 'center' }}>Register</Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <TextField label="Invite Code" required value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} />
-      <TextField label="Company Name" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
       <TextField label="Contact Email" type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
       <TextField label="Contact Name" required value={contactName} onChange={(e) => setContactName(e.target.value)} />
       <TextField label="Password" type="password" required slotProps={{ htmlInput: { minLength: 8 } }} value={password} onChange={(e) => setPassword(e.target.value)} />

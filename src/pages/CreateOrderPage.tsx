@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProducts, type ProductWithPrice } from '../api/products'
-import { createOrder } from '../api/orders'
+import { createOrder, fetchAllowBooking, fetchAllowDelivery } from '../api/orders'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Alert from '@mui/material/Alert'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
+import CircularProgress from '@mui/material/CircularProgress'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 
@@ -42,12 +43,16 @@ export default function CreateOrderPage() {
   const [deliveries, setDeliveries] = useState<DeliveryEntry[]>([])
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [allowBooking, setAllowBooking] = useState<boolean | null>(null)
+  const [allowDelivery, setAllowDelivery] = useState<boolean | null>(null)
 
   useEffect(() => {
     getProducts('None')
       .then(setProducts)
       .catch(() => {})
       .finally(() => setProductsLoading(false))
+    fetchAllowBooking().then(setAllowBooking).catch(() => setAllowBooking(false))
+    fetchAllowDelivery().then(setAllowDelivery).catch(() => setAllowDelivery(false))
   }, [])
 
   const addReservation = () =>
@@ -60,7 +65,7 @@ export default function CreateOrderPage() {
     setReservations((prev) => prev.map((r) => (r.key === key ? { ...r, [field]: value } : r)))
 
   const updateDelivery = (key: number, value: string) =>
-    setDeliveries((prev) => prev.map((d) => (d.key === key ? { ...d, dateTime: value } : d)))
+    setDeliveries((prev) => prev.map((d) => d.key === key ? { ...d, dateTime: value } : d))
 
   const removeReservation = (key: number) =>
     setReservations((prev) => prev.filter((r) => r.key !== key))
@@ -117,136 +122,155 @@ export default function CreateOrderPage() {
     }
   }
 
+  if (allowBooking === null || allowDelivery === null) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (!allowBooking && !allowDelivery) {
+    return (
+      <Box>
+        <Typography variant="h5" gutterBottom>Create Order</Typography>
+        <Alert severity="info">Orders are currently unavailable.</Alert>
+      </Box>
+    )
+  }
+
   return (
     <Box>
       <Typography variant="h5" gutterBottom>Create Order</Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      {/* Reservations */}
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-          <Typography variant="h6">Reservations</Typography>
-          <Button size="small" startIcon={<AddIcon />} onClick={addReservation}>Add Reservation</Button>
-        </Box>
-        {reservations.length === 0 && <Typography color="text.secondary" variant="body2">No reservations added.</Typography>}
-        <Stack spacing={2}>
-          {reservations.map((r) => (
-            <Box key={r.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
-                <TextField
-                  label="Date"
-                  type="date"
-                  size="small"
-                  value={r.date}
-                  onChange={(e) => updateReservation(r.key, 'date', e.target.value)}
-                  slotProps={{ htmlInput: { min: new Date().toISOString().split('T')[0] } }}
-                />
-                <TextField
-                  label="Time"
-                  type="time"
-                  size="small"
-                  value={r.time}
-                  onChange={(e) => updateReservation(r.key, 'time', e.target.value)}
-                />
-                <IconButton color="error" onClick={() => removeReservation(r.key)}><DeleteIcon /></IconButton>
-              </Box>
-              <Stack spacing={1}>
-                {r.products.map((p, idx) => (
-                  <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    <TextField
-                      select
-                      label="Product"
-                      size="small"
-                      sx={{ minWidth: 200 }}
-                      value={p.productId}
-                      onChange={(e) => updateResProduct(r.key, idx, 'productId', e.target.value)}
-                    >
-              {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
-              {products.filter((p) => p.price != null).map((prod) => (
-                <MenuItem key={prod.id} value={prod.id}>
-                  {prod.name} (${prod.price!.toFixed(2)})
-                </MenuItem>
-              ))}
-                    </TextField>
-                    <TextField
-                      label="Qty"
-                      type="number"
-                      size="small"
-                      sx={{ width: 100 }}
-                      value={p.quantity}
-                      onChange={(e) => updateResProduct(r.key, idx, 'quantity', Math.max(1, Number(e.target.value)))}
-                      slotProps={{ htmlInput: { min: 1 } }}
-                    />
-                    {r.products.length > 1 && (
-                      <IconButton size="small" color="error" onClick={() => removeResProduct(r.key, idx)}><DeleteIcon /></IconButton>
-                    )}
-                  </Box>
+      {allowBooking && (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="h6">Reservations</Typography>
+            <Button size="small" startIcon={<AddIcon />} onClick={addReservation}>Add Reservation</Button>
+          </Box>
+          {reservations.length === 0 && <Typography color="text.secondary" variant="body2">No reservations added.</Typography>}
+          <Stack spacing={2}>
+            {reservations.map((r) => (
+              <Box key={r.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
+                  <TextField
+                    label="Date"
+                    type="date"
+                    size="small"
+                    value={r.date}
+                    onChange={(e) => updateReservation(r.key, 'date', e.target.value)}
+                    slotProps={{ htmlInput: { min: new Date().toISOString().split('T')[0] } }}
+                  />
+                  <TextField
+                    label="Time"
+                    type="time"
+                    size="small"
+                    value={r.time}
+                    onChange={(e) => updateReservation(r.key, 'time', e.target.value)}
+                  />
+                  <IconButton color="error" onClick={() => removeReservation(r.key)}><DeleteIcon /></IconButton>
+                </Box>
+                <Stack spacing={1}>
+                  {r.products.map((p, idx) => (
+                    <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <TextField
+                        select
+                        label="Product"
+                        size="small"
+                        sx={{ minWidth: 200 }}
+                        value={p.productId}
+                        onChange={(e) => updateResProduct(r.key, idx, 'productId', e.target.value)}
+                      >
+                {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
+                {products.filter((p) => p.price != null).map((prod) => (
+                  <MenuItem key={prod.id} value={prod.id}>
+                    {prod.name} (${prod.price!.toFixed(2)})
+                  </MenuItem>
                 ))}
-                <Button size="small" onClick={() => addProductToRes(r.key)}>+ Add Product</Button>
-              </Stack>
-            </Box>
-          ))}
-        </Stack>
-      </Paper>
+                      </TextField>
+                      <TextField
+                        label="Qty"
+                        type="number"
+                        size="small"
+                        sx={{ width: 100 }}
+                        value={p.quantity}
+                        onChange={(e) => updateResProduct(r.key, idx, 'quantity', Math.max(1, Number(e.target.value)))}
+                        slotProps={{ htmlInput: { min: 1 } }}
+                      />
+                      {r.products.length > 1 && (
+                        <IconButton size="small" color="error" onClick={() => removeResProduct(r.key, idx)}><DeleteIcon /></IconButton>
+                      )}
+                    </Box>
+                  ))}
+                  <Button size="small" onClick={() => addProductToRes(r.key)}>+ Add Product</Button>
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+        </Paper>
+      )}
 
-      {/* Deliveries */}
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-          <Typography variant="h6">Deliveries</Typography>
-          <Button size="small" startIcon={<AddIcon />} onClick={addDelivery}>Add Delivery</Button>
-        </Box>
-        {deliveries.length === 0 && <Typography color="text.secondary" variant="body2">No deliveries added.</Typography>}
-        <Stack spacing={2}>
-          {deliveries.map((d) => (
-            <Box key={d.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
-                <TextField
-                  label="Date & Time"
-                  type="datetime-local"
-                  size="small"
-                  value={d.dateTime}
-                  onChange={(e) => updateDelivery(d.key, e.target.value)}
-                />
-                <IconButton color="error" onClick={() => removeDelivery(d.key)}><DeleteIcon /></IconButton>
-              </Box>
-              <Stack spacing={1}>
-                {d.products.map((p, idx) => (
-                  <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                    <TextField
-                      select
-                      label="Product"
-                      size="small"
-                      sx={{ minWidth: 200 }}
-                      value={p.productId}
-                      onChange={(e) => updateDelProduct(d.key, idx, 'productId', e.target.value)}
-                    >
-              {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
-              {products.filter((p) => p.price != null).map((prod) => (
-                <MenuItem key={prod.id} value={prod.id}>
-                  {prod.name} (${prod.price!.toFixed(2)})
-                </MenuItem>
-              ))}
-                    </TextField>
-                    <TextField
-                      label="Qty"
-                      type="number"
-                      size="small"
-                      sx={{ width: 100 }}
-                      value={p.quantity}
-                      onChange={(e) => updateDelProduct(d.key, idx, 'quantity', Math.max(1, Number(e.target.value)))}
-                      slotProps={{ htmlInput: { min: 1 } }}
-                    />
-                    {d.products.length > 1 && (
-                      <IconButton size="small" color="error" onClick={() => removeDelProduct(d.key, idx)}><DeleteIcon /></IconButton>
-                    )}
-                  </Box>
+      {allowDelivery && (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="h6">Deliveries</Typography>
+            <Button size="small" startIcon={<AddIcon />} onClick={addDelivery}>Add Delivery</Button>
+          </Box>
+          {deliveries.length === 0 && <Typography color="text.secondary" variant="body2">No deliveries added.</Typography>}
+          <Stack spacing={2}>
+            {deliveries.map((d) => (
+              <Box key={d.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
+                <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
+                  <TextField
+                    label="Date & Time"
+                    type="datetime-local"
+                    size="small"
+                    value={d.dateTime}
+                    onChange={(e) => updateDelivery(d.key, e.target.value)}
+                  />
+                  <IconButton color="error" onClick={() => removeDelivery(d.key)}><DeleteIcon /></IconButton>
+                </Box>
+                <Stack spacing={1}>
+                  {d.products.map((p, idx) => (
+                    <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <TextField
+                        select
+                        label="Product"
+                        size="small"
+                        sx={{ minWidth: 200 }}
+                        value={p.productId}
+                        onChange={(e) => updateDelProduct(d.key, idx, 'productId', e.target.value)}
+                      >
+                {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
+                {products.filter((p) => p.price != null).map((prod) => (
+                  <MenuItem key={prod.id} value={prod.id}>
+                    {prod.name} (${prod.price!.toFixed(2)})
+                  </MenuItem>
                 ))}
-                <Button size="small" onClick={() => addProductToDel(d.key)}>+ Add Product</Button>
-              </Stack>
-            </Box>
-          ))}
-        </Stack>
-      </Paper>
+                      </TextField>
+                      <TextField
+                        label="Qty"
+                        type="number"
+                        size="small"
+                        sx={{ width: 100 }}
+                        value={p.quantity}
+                        onChange={(e) => updateDelProduct(d.key, idx, 'quantity', Math.max(1, Number(e.target.value)))}
+                        slotProps={{ htmlInput: { min: 1 } }}
+                      />
+                      {d.products.length > 1 && (
+                        <IconButton size="small" color="error" onClick={() => removeDelProduct(d.key, idx)}><DeleteIcon /></IconButton>
+                      )}
+                    </Box>
+                  ))}
+                  <Button size="small" onClick={() => addProductToDel(d.key)}>+ Add Product</Button>
+                </Stack>
+              </Box>
+            ))}
+          </Stack>
+        </Paper>
+      )}
 
       <Button variant="contained" size="large" onClick={handleSubmit} disabled={submitting}>
         {submitting ? 'Submitting...' : 'Submit Order'}

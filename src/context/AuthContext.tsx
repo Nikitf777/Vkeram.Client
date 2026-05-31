@@ -5,7 +5,7 @@ import { me, login as apiLogin, register as apiRegister, type AuthResponse, type
 interface AuthState {
   token: string | null
   userId: number | null
-  companyName: string | null
+  buyerId: string | null
 }
 
 interface AuthContextType extends AuthState {
@@ -21,8 +21,8 @@ const AuthContext = createContext<AuthContextType | null>(null)
 function loadState(): AuthState {
   const token = localStorage.getItem('token')
   const userId = localStorage.getItem('userId')
-  const companyName = localStorage.getItem('companyName')
-  return { token, userId: userId ? Number(userId) : null, companyName }
+  const buyerId = localStorage.getItem('buyerId')
+  return { token, userId: userId ? Number(userId) : null, buyerId }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -32,8 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const save = useCallback((res: AuthResponse) => {
     localStorage.setItem('token', res.token ?? '')
     localStorage.setItem('userId', String(res.userId ?? ''))
-    localStorage.setItem('companyName', res.companyName ?? '')
-    setState({ token: res.token ?? null, userId: res.userId ?? null, companyName: res.companyName ?? null })
+    localStorage.setItem('buyerId', res.buyerId ?? '')
+    setState({ token: res.token ?? null, userId: res.userId ?? null, buyerId: res.buyerId ?? null })
   }, [])
 
   const login = useCallback(async (data: LoginRequest) => {
@@ -49,8 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('userId')
-    localStorage.removeItem('companyName')
-    setState({ token: null, userId: null, companyName: null })
+    localStorage.removeItem('buyerId')
+    setState({ token: null, userId: null, buyerId: null })
     navigate('/')
   }, [navigate])
 

@@ -26,7 +26,7 @@ export default function AccountPage() {
       <Typography variant="h5" gutterBottom>My Account</Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Typography><strong>User ID:</strong> {data.userId}</Typography>
-        <Typography><strong>Company Name:</strong> {data.companyName ?? '-'}</Typography>
+        <Typography><strong>Buyer ID:</strong> {data.buyerId ?? '-'}</Typography>
       </Box>
     </Paper>
   )

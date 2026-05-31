@@ -8,7 +8,7 @@ import Container from '@mui/material/Container'
 import { useAuth } from '../context/AuthContext'
 
 export default function Layout() {
-  const { isAuthenticated, companyName, logout } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function Layout() {
           {isAuthenticated ? (
             <>
               <Button color="inherit" component={RouterLink} to="/account">
-                {companyName ?? 'My Account'}
+                My Account
               </Button>
               <Button color="inherit" onClick={logout}>
                 Logout

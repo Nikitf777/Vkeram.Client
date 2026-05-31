@@ -19,13 +19,12 @@ export interface AuthResponse {
   success: boolean
   message: string
   userId?: number
-  companyName?: string
+  buyerId?: string
   token?: string
 }
 
 export interface RegisterRequest {
   inviteCode: string
-  companyName: string
   contactEmail: string
   contactName: string
   password: string
