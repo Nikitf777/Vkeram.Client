@@ -111,11 +111,11 @@ export default function CreateOrderPage() {
     try {
       const payload = {
         reservations: reservations.map((r) => ({
-          startTime: new Date(`${r.date}T${r.time}`).toISOString(),
+          startTime: `${r.date}T${r.time}`,
           products: r.products.map((p) => ({ productId: p.productId, quantity: p.quantity })),
         })),
         deliveries: deliveries.map((d) => ({
-          deliveryTime: new Date(d.dateTime).toISOString(),
+          deliveryTime: d.dateTime,
           products: d.products.map((p) => ({ productId: p.productId, quantity: p.quantity })),
         })),
       }
