@@ -56,7 +56,7 @@ export default function OrderDetailPage() {
           <Chip label={`Shipment: ${order.shipmentStatus}`} color={statusColor[order.shipmentStatus ?? ''] || 'default'} />
         </Box>
         <Typography variant="body2" color="text.secondary">
-          Created: {order.createdAt ? new Date(order.createdAt).toLocaleString() : '-'}
+            Created: {order.createdAt ? new Date(order.createdAt).toLocaleString(undefined, { hour12: false }) : '-'}
         </Typography>
         <Typography variant="body2">
           Total: {order.totalQuantity} items for {order.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
@@ -69,7 +69,7 @@ export default function OrderDetailPage() {
           {order.reservations.map((r, i) => (
             <Box key={i} sx={{ mb: 2 }}>
               <Typography variant="subtitle2">
-                Slot {i + 1}: {new Date(r.startTime).toLocaleString()} - {new Date(r.endTime).toLocaleString()}
+                Slot {i + 1}: {new Date(r.startTime).toLocaleString(undefined, { hour12: false })} - {new Date(r.endTime).toLocaleString(undefined, { hour12: false })}
               </Typography>
               {r.products && r.products.length > 0 && (
                 <TableContainer>
@@ -106,7 +106,7 @@ export default function OrderDetailPage() {
           {order.deliveries.map((d, i) => (
             <Box key={i} sx={{ mb: 2 }}>
               <Typography variant="subtitle2">
-                Delivery {i + 1}: {new Date(d.deliveryTime).toLocaleString()}
+                Delivery {i + 1}: {new Date(d.deliveryTime).toLocaleString(undefined, { hour12: false })}
               </Typography>
               {d.products && d.products.length > 0 && (
                 <TableContainer>

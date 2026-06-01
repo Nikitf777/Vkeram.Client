@@ -5,6 +5,7 @@ import { createOrder, fetchAllowBooking, fetchAllowDelivery } from '../api/order
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
@@ -64,8 +65,17 @@ export default function CreateOrderPage() {
   const updateReservation = (key: number, field: 'date' | 'time', value: string) =>
     setReservations((prev) => prev.map((r) => (r.key === key ? { ...r, [field]: value } : r)))
 
-  const updateDelivery = (key: number, value: string) =>
-    setDeliveries((prev) => prev.map((d) => d.key === key ? { ...d, dateTime: value } : d))
+  const updateDeliveryDate = (key: number, date: string) =>
+    setDeliveries((prev) => prev.map((d) => {
+      const time = d.dateTime.split('T')[1] || ''
+      return d.key === key ? { ...d, dateTime: time ? `${date}T${time}` : date } : d
+    }))
+
+  const updateDeliveryTime = (key: number, time: string) =>
+    setDeliveries((prev) => prev.map((d) => {
+      const date = d.dateTime.split('T')[0] || ''
+      return d.key === key ? { ...d, dateTime: date ? `${date}T${time}` : time } : d
+    }))
 
   const removeReservation = (key: number) =>
     setReservations((prev) => prev.filter((r) => r.key !== key))
@@ -163,12 +173,9 @@ export default function CreateOrderPage() {
                     onChange={(e) => updateReservation(r.key, 'date', e.target.value)}
                     slotProps={{ htmlInput: { min: new Date().toISOString().split('T')[0] } }}
                   />
-                  <TextField
-                    label="Time"
-                    type="time"
-                    size="small"
+                  <TimeField
                     value={r.time}
-                    onChange={(e) => updateReservation(r.key, 'time', e.target.value)}
+                    onChange={(v) => updateReservation(r.key, 'time', v)}
                   />
                   <IconButton color="error" onClick={() => removeReservation(r.key)}><DeleteIcon /></IconButton>
                 </Box>
@@ -224,11 +231,16 @@ export default function CreateOrderPage() {
               <Box key={d.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
                   <TextField
-                    label="Date & Time"
-                    type="datetime-local"
+                    label="Date"
+                    type="date"
                     size="small"
-                    value={d.dateTime}
-                    onChange={(e) => updateDelivery(d.key, e.target.value)}
+                    value={d.dateTime.split('T')[0] || ''}
+                    onChange={(e) => updateDeliveryDate(d.key, e.target.value)}
+                    slotProps={{ htmlInput: { min: new Date().toISOString().split('T')[0] } }}
+                  />
+                  <TimeField
+                    value={d.dateTime.split('T')[1] || ''}
+                    onChange={(v) => updateDeliveryTime(d.key, v)}
                   />
                   <IconButton color="error" onClick={() => removeDelivery(d.key)}><DeleteIcon /></IconButton>
                 </Box>
@@ -275,6 +287,27 @@ export default function CreateOrderPage() {
       <Button variant="contained" size="large" onClick={handleSubmit} disabled={submitting}>
         {submitting ? 'Submitting...' : 'Submit Order'}
       </Button>
+    </Box>
+  )
+}
+
+const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
+
+function TimeField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const parts = value.split(':');
+  const hour = parts[0] || '00';
+  const minute = parts[1] || '00';
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <Select size="small" value={hour} onChange={(e) => onChange(`${e.target.value}:${minute}`)} sx={{ width: 70 }}>
+        {HOURS.map(h => <MenuItem key={h} value={h}>{h}</MenuItem>)}
+      </Select>
+      <Typography>:</Typography>
+      <Select size="small" value={minute} onChange={(e) => onChange(`${hour}:${e.target.value}`)} sx={{ width: 70 }}>
+        {MINUTES.map(m => <MenuItem key={m} value={m}>{m}</MenuItem>)}
+      </Select>
     </Box>
   )
 }
