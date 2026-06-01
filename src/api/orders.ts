@@ -20,6 +20,7 @@ export interface ProductReservationInfo {
   productId: string
   productName: string
   quantity: number
+  vat: number
   price: number
   totalPrice: number
 }

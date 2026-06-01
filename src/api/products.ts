@@ -35,6 +35,7 @@ export interface ProductWithPrice {
   id: string
   name: string
   price?: number | null
+  vat: number
   characteristics?: ProductCharacteristic | null
   previewUrl?: string | null
 }
