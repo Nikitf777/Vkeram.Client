@@ -2,7 +2,7 @@ const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:5000'
 
 async function authRequest<T>(url: string, options?: RequestInit): Promise<T> {
   const token = localStorage.getItem('token')
-  if (!token) throw new Error('Not authenticated')
+  if (!token) throw new Error('Войдите в аккаунт, чтобы сделать заказ')
   const res = await fetch(`${BASE}${url}`, {
     ...options,
     headers: {

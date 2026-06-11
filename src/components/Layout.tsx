@@ -15,27 +15,27 @@ export default function Layout() {
       <AppBar position="sticky" sx={{ bgcolor: '#860A1F' }}>
         <Toolbar>
           <Typography variant="h6" sx={{ mr: 4, fontWeight: 700, letterSpacing: 1 }}>
-            VKERAM
+            ОАО «Керамика»
           </Typography>
           <Button color="inherit" component={RouterLink} to="/products">
-            Products
+            Товары
           </Button>
           <Button color="inherit" component={RouterLink} to="/orders">
-            Orders
+            Заказы
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {isAuthenticated ? (
             <>
               <Button color="inherit" component={RouterLink} to="/account">
-                My Account
+                Мой аккаунт
               </Button>
               <Button color="inherit" onClick={logout}>
-                Logout
+                Выйти
               </Button>
             </>
           ) : (
             <Button color="inherit" component={RouterLink} to="/login">
-              Login
+              Войти
             </Button>
           )}
         </Toolbar>
