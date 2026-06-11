@@ -55,7 +55,7 @@ export default function ProductsPage() {
             <CardContent sx={{ flex: 1 }}>
               <Typography variant="h6">{p.name}</Typography>
               <Typography variant="body2" color="text.secondary">
-                {p.price != null ? `$${p.price.toFixed(2)}` : 'Price unavailable'}
+                {p.price != null ? `${p.price.toFixed(2)} руб.` : 'Price unavailable'}
               </Typography>
               {p.characteristics && (
                 <Box sx={{ mt: 1 }}>

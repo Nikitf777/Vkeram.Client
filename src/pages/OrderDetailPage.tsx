@@ -56,10 +56,10 @@ export default function OrderDetailPage() {
           <Chip label={`Shipment: ${order.shipmentStatus}`} color={statusColor[order.shipmentStatus ?? ''] || 'default'} />
         </Box>
         <Typography variant="body2" color="text.secondary">
-            Created: {order.createdAt ? new Date(order.createdAt).toLocaleString(undefined, { hour12: false }) : '-'}
+          Created: {order.createdAt ? new Date(order.createdAt).toLocaleString(undefined, { hour12: false }) : '-'}
         </Typography>
         <Typography variant="body2">
-          Total: {order.totalQuantity} items for {order.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })} (incl. VAT)
+          Total: {order.totalQuantity} items for {order.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })} (incl. VAT)
         </Typography>
       </Paper>
 
@@ -89,8 +89,8 @@ export default function OrderDetailPage() {
                           <TableCell>{p.productName}</TableCell>
                           <TableCell align="right">{p.quantity}</TableCell>
                           <TableCell align="right">{p.vat > 0 ? `${p.vat}%` : '-'}</TableCell>
-                          <TableCell align="right">{p.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</TableCell>
-                          <TableCell align="right">{p.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</TableCell>
+                          <TableCell align="right">{p.price.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })}</TableCell>
+                          <TableCell align="right">{p.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -128,8 +128,8 @@ export default function OrderDetailPage() {
                           <TableCell>{p.productName}</TableCell>
                           <TableCell align="right">{p.quantity}</TableCell>
                           <TableCell align="right">{p.vat > 0 ? `${p.vat}%` : '-'}</TableCell>
-                          <TableCell align="right">{p.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</TableCell>
-                          <TableCell align="right">{p.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</TableCell>
+                          <TableCell align="right">{p.price.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })}</TableCell>
+                          <TableCell align="right">{p.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

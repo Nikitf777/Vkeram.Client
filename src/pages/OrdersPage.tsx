@@ -86,7 +86,7 @@ export default function OrdersPage() {
                     <Chip size="small" label={o.shipmentStatus} color={statusColor[o.shipmentStatus ?? ''] || 'default'} />
                   </TableCell>
                   <TableCell align="right">{o.totalQuantity}</TableCell>
-                  <TableCell align="right">{o.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</TableCell>
+                  <TableCell align="right">{o.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'BYN' })}</TableCell>
                   <TableCell>{o.createdAt ? new Date(o.createdAt).toLocaleDateString() : '-'}</TableCell>
                 </TableRow>
               ))}
