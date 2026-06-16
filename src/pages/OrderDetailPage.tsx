@@ -65,7 +65,7 @@ export default function OrderDetailPage() {
 
       {order.reservations && order.reservations.length > 0 && (
         <Paper sx={{ p: 2, mb: 2 }}>
-          <Typography variant="h6" gutterBottom>Reservations</Typography>
+          <Typography variant="h6" gutterBottom>Бронирования</Typography>
           {order.reservations.map((r, i) => (
             <Box key={i} sx={{ mb: 2 }}>
               <Typography variant="subtitle2">
@@ -104,7 +104,7 @@ export default function OrderDetailPage() {
 
       {order.deliveries && order.deliveries.length > 0 && (
         <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" gutterBottom>Deliveries</Typography>
+          <Typography variant="h6" gutterBottom>Доставки</Typography>
           {order.deliveries.map((d, i) => (
             <Box key={i} sx={{ mb: 2 }}>
               <Typography variant="subtitle2">

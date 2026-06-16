@@ -50,7 +50,7 @@ export default function CreateOrderPage() {
   useEffect(() => {
     getProducts('None')
       .then(setProducts)
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setProductsLoading(false))
     fetchAllowBooking().then(setAllowBooking).catch(() => setAllowBooking(false))
     fetchAllowDelivery().then(setAllowDelivery).catch(() => setAllowDelivery(false))
@@ -143,30 +143,30 @@ export default function CreateOrderPage() {
   if (!allowBooking && !allowDelivery) {
     return (
       <Box>
-        <Typography variant="h5" gutterBottom>Create Order</Typography>
-        <Alert severity="info">Orders are currently unavailable.</Alert>
+        <Typography variant="h5" gutterBottom>Создать заказ</Typography>
+        <Alert severity="info">Заказы в данный момент недоступны.</Alert>
       </Box>
     )
   }
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>Create Order</Typography>
+      <Typography variant="h5" gutterBottom>Создать заказ</Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       {allowBooking && (
         <Paper sx={{ p: 2, mb: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-            <Typography variant="h6">Reservations</Typography>
-            <Button size="small" startIcon={<AddIcon />} onClick={addReservation}>Add Reservation</Button>
+            <Typography variant="h6">Бронирования</Typography>
+            <Button size="small" startIcon={<AddIcon />} onClick={addReservation}>Добавить бронирование</Button>
           </Box>
-          {reservations.length === 0 && <Typography color="text.secondary" variant="body2">No reservations added.</Typography>}
+          {reservations.length === 0 && <Typography color="text.secondary" variant="body2">Бронирований не добавлено.</Typography>}
           <Stack spacing={2}>
             {reservations.map((r) => (
               <Box key={r.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
                   <TextField
-                    label="Date"
+                    label="Дата"
                     type="date"
                     size="small"
                     value={r.date}
@@ -184,21 +184,21 @@ export default function CreateOrderPage() {
                     <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                       <TextField
                         select
-                        label="Product"
+                        label="Товар"
                         size="small"
                         sx={{ minWidth: 200 }}
                         value={p.productId}
                         onChange={(e) => updateResProduct(r.key, idx, 'productId', e.target.value)}
                       >
-                {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
-                {products.filter((p) => p.price != null).map((prod) => (
-                  <MenuItem key={prod.id} value={prod.id}>
-                    {prod.name} (${prod.price!.toFixed(2)})
-                  </MenuItem>
-                ))}
+                        {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
+                        {products.filter((p) => p.price != null).map((prod) => (
+                          <MenuItem key={prod.id} value={prod.id}>
+                            {prod.name} ({prod.price!.toFixed(2)} руб.)
+                          </MenuItem>
+                        ))}
                       </TextField>
                       <TextField
-                        label="Qty"
+                        label="Кол-во"
                         type="number"
                         size="small"
                         sx={{ width: 100 }}
@@ -211,7 +211,7 @@ export default function CreateOrderPage() {
                       )}
                     </Box>
                   ))}
-                  <Button size="small" onClick={() => addProductToRes(r.key)}>+ Add Product</Button>
+                  <Button size="small" onClick={() => addProductToRes(r.key)}>+ Добавить товар</Button>
                 </Stack>
               </Box>
             ))}
@@ -222,16 +222,16 @@ export default function CreateOrderPage() {
       {allowDelivery && (
         <Paper sx={{ p: 2, mb: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-            <Typography variant="h6">Deliveries</Typography>
-            <Button size="small" startIcon={<AddIcon />} onClick={addDelivery}>Add Delivery</Button>
+            <Typography variant="h6">Доставки</Typography>
+            <Button size="small" startIcon={<AddIcon />} onClick={addDelivery}>Добавить доставку</Button>
           </Box>
-          {deliveries.length === 0 && <Typography color="text.secondary" variant="body2">No deliveries added.</Typography>}
+          {deliveries.length === 0 && <Typography color="text.secondary" variant="body2">Доставок не добавлено.</Typography>}
           <Stack spacing={2}>
             {deliveries.map((d) => (
               <Box key={d.key} sx={{ border: 1, borderColor: 'divider', borderRadius: 1, p: 2 }}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', mb: 1 }}>
                   <TextField
-                    label="Date"
+                    label="Дата"
                     type="date"
                     size="small"
                     value={d.dateTime.split('T')[0] || ''}
@@ -249,21 +249,21 @@ export default function CreateOrderPage() {
                     <Box key={idx} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                       <TextField
                         select
-                        label="Product"
+                        label="Товар"
                         size="small"
                         sx={{ minWidth: 200 }}
                         value={p.productId}
                         onChange={(e) => updateDelProduct(d.key, idx, 'productId', e.target.value)}
                       >
-                {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
-                {products.filter((p) => p.price != null).map((prod) => (
-                  <MenuItem key={prod.id} value={prod.id}>
-                    {prod.name} (${prod.price!.toFixed(2)})
-                  </MenuItem>
-                ))}
+                        {productsLoading && <MenuItem disabled>Loading...</MenuItem>}
+                        {products.filter((p) => p.price != null).map((prod) => (
+                          <MenuItem key={prod.id} value={prod.id}>
+                            {prod.name} ({prod.price!.toFixed(2)} руб.)
+                          </MenuItem>
+                        ))}
                       </TextField>
                       <TextField
-                        label="Qty"
+                        label="Кол-во"
                         type="number"
                         size="small"
                         sx={{ width: 100 }}
@@ -276,7 +276,7 @@ export default function CreateOrderPage() {
                       )}
                     </Box>
                   ))}
-                  <Button size="small" onClick={() => addProductToDel(d.key)}>+ Add Product</Button>
+                  <Button size="small" onClick={() => addProductToDel(d.key)}>+ Добавить товар</Button>
                 </Stack>
               </Box>
             ))}
@@ -285,7 +285,7 @@ export default function CreateOrderPage() {
       )}
 
       <Button variant="contained" size="large" onClick={handleSubmit} disabled={submitting}>
-        {submitting ? 'Submitting...' : 'Submit Order'}
+        {submitting ? 'Submitting...' : 'Разместить заказ'}
       </Button>
     </Box>
   )

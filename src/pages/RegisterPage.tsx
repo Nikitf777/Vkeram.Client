@@ -35,17 +35,17 @@ export default function RegisterPage() {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 8, display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Typography variant="h5" sx={{ textAlign: 'center' }}>Register</Typography>
+      <Typography variant="h5" sx={{ textAlign: 'center' }}>Зарегистрироваться</Typography>
       {error && <Alert severity="error">{error}</Alert>}
-      <TextField label="Invite Code" required value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} />
-      <TextField label="Contact Email" type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
-      <TextField label="Contact Name" required value={contactName} onChange={(e) => setContactName(e.target.value)} />
-      <TextField label="Password" type="password" required slotProps={{ htmlInput: { minLength: 8 } }} value={password} onChange={(e) => setPassword(e.target.value)} />
-      <TextField label="Phone (optional)" value={phone} onChange={(e) => setPhone(e.target.value)} />
-      <Button type="submit" variant="contained" disabled={loading}>{loading ? 'Registering...' : 'Register'}</Button>
+      <TextField label="Код приглашения" required value={inviteCode} onChange={(e) => setInviteCode(e.target.value)} />
+      <TextField label="Контактный email" type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
+      <TextField label="Контактное имя" required value={contactName} onChange={(e) => setContactName(e.target.value)} />
+      <TextField label="Пароль" type="password" required slotProps={{ htmlInput: { minLength: 8 } }} value={password} onChange={(e) => setPassword(e.target.value)} />
+      <TextField label="Телефон (не обязательно)" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      <Button type="submit" variant="contained" disabled={loading}>{loading ? 'Регистрация...' : 'Зарегистрироваться'}</Button>
       <Typography sx={{ textAlign: 'center' }} variant="body2">
-        Already have an account?{' '}
-        <Link component={RouterLink} to="/login">Login</Link>
+        Уже есть аккаунт?{' '}
+        <Link component={RouterLink} to="/login">Войти</Link>
       </Typography>
     </Box>
   )

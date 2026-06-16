@@ -32,14 +32,14 @@ export default function LoginPage() {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto', mt: 8, display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Typography variant="h5" sx={{ textAlign: 'center' }}>Login</Typography>
+      <Typography variant="h5" sx={{ textAlign: 'center' }}>Войти</Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <TextField label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-      <TextField label="Password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-      <Button type="submit" variant="contained" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</Button>
+      <TextField label="Пароль" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+      <Button type="submit" variant="contained" disabled={loading}>{loading ? 'Вход...' : 'Войти'}</Button>
       <Typography sx={{ textAlign: 'center' }} variant="body2">
-        Don&apos;t have an account?{' '}
-        <Link component={RouterLink} to="/register">Register</Link>
+        Нет аккаунта?{' '}
+        <Link component={RouterLink} to="/register">Зарегистрироваться</Link>
       </Typography>
     </Box>
   )

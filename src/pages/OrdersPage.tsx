@@ -46,13 +46,13 @@ export default function OrdersPage() {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h5">My Orders</Typography>
+        <Typography variant="h5">Мои заказы</Typography>
         <Button variant="contained" component={RouterLink} to="/orders/new">
-          Create Order
+          Создать заказ
         </Button>
       </Box>
       {orders.length === 0 ? (
-        <Typography color="text.secondary">No orders yet.</Typography>
+        <Typography color="text.secondary">Нет заказов.</Typography>
       ) : (
         <TableContainer component={Paper}>
           <Table size="small">
